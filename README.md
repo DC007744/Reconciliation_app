@@ -13,6 +13,7 @@ A Flask app that ingests bank and ledger CSVs, fuzzy‐matches transactions (±�
 ## Installation
 
 ```bash
-git clone https://github.com/yourusername/reconciliation-app.git
-cd reconciliation-app
+git clone https://github.com/DC007744/Reconciliation_app.git
+cd Reconciliation_app
 pip install -r requirements.txt
+python app.py
