@@ -17,3 +17,15 @@ git clone https://github.com/DC007744/Reconciliation_app.git
 cd Reconciliation_app
 pip install -r requirements.txt
 python app.py
+
+## Matching Logic
+
+- Load & Clean: normalise date → midnight, amount → float, description → lowercase alphanumeric.
+- Candidate Generation: cross‑join, then filter ±₹1 and ±3 days.
+- Scoring:
+      amount score = max(0, 1 – Δamt/₹1) × 100
+      date score = max(0, 1 – Δdays/3) × 100
+      desc score = RapidFuzz’s token_set_ratio
+      composite = 0.45⋅amt + 0.25⋅date + 0.30⋅desc
+- Max‑Weight Matching: treat bank & ledger rows as bipartite graph nodes, edge = score, pick the one‑to‑one set maximizing total score, then threshold ≥ 70.
+- Render & Export: Flask writes three CSVs and populates the UI tables.
