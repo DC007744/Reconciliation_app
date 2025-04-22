@@ -1,0 +1,13 @@
+transaction_id,date,amount,description
+L001,2025-04-02,150.00,coffee shop
+L002,2025-04-01,299.99,software licensing fee
+L003,2025-04-04,45.50,office supply purchase
+L004,2025-03-29,15.99,streaming sub
+L005,2025-03-30,1200.00,grand hotel stay
+L006,2025-04-06,350.75,airline ticket purchase
+L007,2025-04-02,50.00,donation to charity
+L008,2025-04-04,3.50,bank fees
+L009,2025-03-27,200.00,transaction refund
+L010,2025-04-02,5000.00,monthly salary
+L013,2025-04-06,25.00,Taxi Service
+L014,2025-04-01,80.00,supplies office

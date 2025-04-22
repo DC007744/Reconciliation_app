@@ -1,0 +1,19 @@
+<h2>Unmatched Ledger</h2>
+<table class="table table-sm table-striped">
+  <thead>
+    <tr>
+      {% for col in unmatched_ledger[0].keys() %}
+        <th>{{ col }}</th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in unmatched_ledger %}
+    <tr>
+      {% for val in row.values() %}
+        <td>{{ val }}</td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>

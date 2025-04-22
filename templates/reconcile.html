@@ -1,0 +1,244 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Reconciliation</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    >
+    <style>
+      thead th {
+        background-color: #f8f9fa;
+        font-weight: 600;
+      }
+      .super-header th {
+        background-color: #dbe9ff;
+        text-align: center;
+        font-size: 1rem;
+        padding: 8px;
+        border-bottom: 2px solid #dee2e6;
+      }
+      /* thick black line after Bank Description column */
+      .section-divider { border-right: 4px solid #000; }
+      /* grey out Match Score column */
+      .table-bordered thead tr.super-header th:first-child,
+      .table-bordered tbody td:first-child {
+        background-color: #e9ecef;
+      }
+      /* Chat widget styling */
+      #chat-widget {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 300px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        border-radius: 8px;
+        overflow: hidden;
+        font-family: sans-serif;
+        z-index: 1000;
+      }
+      #chat-header {
+        background: #007bff;
+        color: #fff;
+        padding: 12px;
+        cursor: pointer;
+      }
+      #chat-body {
+        background: #f8f9fa;
+        max-height: 350px;
+        display: none;
+        flex-direction: column;
+      }
+      #chat-messages {
+        flex: 1;
+        padding: 10px;
+        overflow-y: auto;
+      }
+      .chat-msg.user { text-align: right; margin-bottom: 8px; }
+      .chat-msg.bot  { text-align: left; margin-bottom: 8px; }
+      #chat-input-area {
+        display: flex;
+        border-top: 1px solid #ddd;
+      }
+      #chat-input {
+        flex: 1;
+        border: none;
+        padding: 8px;
+        outline: none;
+      }
+      #chat-send {
+        border: none;
+        background: #007bff;
+        color: #fff;
+        padding: 0 16px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body class="p-4">
+    <div class="container">
+      <h1>Transaction Reconciliation</h1>
+
+      {% if not show_results %}
+        <!-- upload form -->
+        <form method="post" enctype="multipart/form-data">
+          <div class="mb-3">
+            <label class="form-label">Bank CSV</label>
+            <input type="file" name="bank_file" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Ledger CSV</label>
+            <input type="file" name="ledger_file" class="form-control" required>
+          </div>
+          <button class="btn btn-primary">Reconcile</button>
+        </form>
+      {% else %}
+        <!-- nav tabs -->
+        <ul class="nav nav-tabs mt-4" id="reconTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link active"
+              id="all-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#tab-all"
+              type="button"
+              role="tab"
+              aria-controls="tab-all"
+              aria-selected="true"
+            >All</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="matched-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#tab-matched"
+              type="button"
+              role="tab"
+              aria-controls="tab-matched"
+              aria-selected="false"
+            >Matched Transactions</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="unmatched-bank-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#tab-bank"
+              type="button"
+              role="tab"
+              aria-controls="tab-bank"
+              aria-selected="false"
+            >Unmatched (Bank)</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="unmatched-ledger-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#tab-ledger"
+              type="button"
+              role="tab"
+              aria-controls="tab-ledger"
+              aria-selected="false"
+            >Unmatched (Ledger)</button>
+          </li>
+        </ul>
+
+        <div class="tab-content mt-3" id="reconTabsContent">
+          <!-- All -->
+          <div
+            class="tab-pane fade show active"
+            id="tab-all"
+            role="tabpanel"
+            aria-labelledby="all-tab"
+          >
+            {% include 'partials/matched_table.html' %}
+            {% include 'partials/unmatched_bank_table.html' %}
+            {% include 'partials/unmatched_ledger_table.html' %}
+          </div>
+
+          <!-- Matched -->
+          <div
+            class="tab-pane fade"
+            id="tab-matched"
+            role="tabpanel"
+            aria-labelledby="matched-tab"
+          >
+            {% include 'partials/matched_table.html' %}
+          </div>
+
+          <!-- Unmatched Bank -->
+          <div
+            class="tab-pane fade"
+            id="tab-bank"
+            role="tabpanel"
+            aria-labelledby="unmatched-bank-tab"
+          >
+            {% include 'partials/unmatched_bank_table.html' %}
+          </div>
+
+          <!-- Unmatched Ledger -->
+          <div
+            class="tab-pane fade"
+            id="tab-ledger"
+            role="tabpanel"
+            aria-labelledby="unmatched-ledger-tab"
+          >
+            {% include 'partials/unmatched_ledger_table.html' %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Chat widget
+    <div id="chat-widget">
+      <div id="chat-header">Help Chat</div>
+      <div id="chat-body">
+        <div id="chat-messages"></div>
+        <div id="chat-input-area">
+          <input type="text" id="chat-input" placeholder="Type a message…" />
+          <button id="chat-send">Send</button>
+        </div>
+      </div>
+    </div> -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // Tab initialization (Bootstrap handles this)
+
+      // Chat widget toggle
+      document.getElementById('chat-header').onclick = () => {
+        const body = document.getElementById('chat-body');
+        body.style.display = body.style.display === 'none' ? 'flex' : 'none';
+      };
+      // Send message
+      document.getElementById('chat-send').onclick = async () => {
+        const input = document.getElementById('chat-input');
+        const text  = input.value.trim();
+        if (!text) return;
+        const msgs = document.getElementById('chat-messages');
+        msgs.innerHTML += `<div class="chat-msg user">${text}</div>`;
+        input.value = '';
+        msgs.scrollTop = msgs.scrollHeight;
+        const resp = await fetch('/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: text })
+        });
+        const data = await resp.json();
+        msgs.innerHTML += `<div class="chat-msg bot">${data.reply}</div>`;
+        msgs.scrollTop = msgs.scrollHeight;
+      };
+      // Enter key
+      document.getElementById('chat-input').addEventListener('keypress', e => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          document.getElementById('chat-send').click();
+        }
+      });
+    </script>
+    {% include 'partials/chat_widget.html' %}
+  </body>
+</html>

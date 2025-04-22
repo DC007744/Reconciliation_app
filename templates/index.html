@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Invoices</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    >
+  </head>
+  <body class="p-4">
+    <div class="container">
+      <h1>Invoices</h1>
+
+      <!-- Filter pills -->
+      <ul class="nav nav-pills mb-3">
+        {% for label, cnt in counts.items() %}
+          <li class="nav-item">
+            <a
+              class="nav-link {% if selected == label %}active{% endif %}"
+              href="/?status={{ label }}"
+            >
+              {{ label }}
+              <span class="badge bg-light text-dark">{{ cnt }}</span>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+
+      <!-- Data table -->
+      <table class="table">
+        <thead>
+          <tr>
+            <th><input type="checkbox" /></th>
+            <th>Customer</th>
+            <th>Amount</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for inv in invoices %}
+            <tr>
+              <td><input type="checkbox" /></td>
+              <td>{{ inv.customer }}</td>
+              <td>{{ inv.amount }}</td>
+              <td>
+                <span class="badge
+                  {% if inv.status == 'Paid' %} bg-success
+                  {% elif inv.status == 'Outstanding' %} bg-warning text-dark
+                  {% elif inv.status == 'Overdue' %} bg-danger
+                  {% else %} bg-secondary
+                  {% endif %}"
+                >
+                  {{ inv.status }}
+                </span>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
+

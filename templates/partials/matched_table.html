@@ -1,0 +1,35 @@
+<h2>Matched Transactions</h2>
+<table class="table table-bordered">
+  <thead>
+    <tr class="super-header">
+      <th rowspan="2">Match Score</th>
+      <th colspan="4" class="section-divider">Bank Transactions</th>
+      <th colspan="4">Ledger Transactions</th>
+    </tr>
+    <tr>
+      <th>ID</th>
+      <th>Date</th>
+      <th>Amount</th>
+      <th class="section-divider">Description</th>
+      <th>ID</th>
+      <th>Date</th>
+      <th>Amount</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in matched_records %}
+    <tr>
+      <td>{{ row['Match Score'] }}</td>
+      <td>{{ row['Bank Transaction ID'] }}</td>
+      <td>{{ row['Bank Date'] }}</td>
+      <td>{{ row['Bank Amount'] }}</td>
+      <td class="section-divider">{{ row['Bank Description'] }}</td>
+      <td>{{ row['Ledger Transaction ID'] }}</td>
+      <td>{{ row['Ledger Date'] }}</td>
+      <td>{{ row['Ledger Amount'] }}</td>
+      <td>{{ row['Ledger Description'] }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>

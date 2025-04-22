@@ -1,0 +1,19 @@
+<h2>Unmatched Bank</h2>
+<table class="table table-sm table-striped">
+  <thead>
+    <tr>
+      {% for col in unmatched_bank[0].keys() %}
+        <th>{{ col }}</th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in unmatched_bank %}
+    <tr>
+      {% for val in row.values() %}
+        <td>{{ val }}</td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>

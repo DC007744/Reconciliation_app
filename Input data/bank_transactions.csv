@@ -1,0 +1,13 @@
+transaction_id,date,amount,description
+B001,2025-04-01,150.00,Coffee Shop
+B002,2025-04-03,299.99,Software License
+B003,2025-04-02,45.50,Office Supplies
+B004,2025-03-30,15.99,Streaming Service
+B005,2025-03-29,1200.00,Hotel Stay
+B006,2025-04-05,350.75,Airline Ticket
+B007,2025-04-01,50.00,Charity Donation
+B008,2025-04-04,2.50,Bank Fee
+B009,2025-03-28,200.00,Refund
+B010,2025-04-02,5000.00,Salary
+B011,2025-04-06,30.00,Taxi Fare
+B012,2025-03-31,75.25,Office Supplies
