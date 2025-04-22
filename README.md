@@ -20,13 +20,31 @@ python app.py
 ```
 
 ## Matching Logic
+![app_dfd](https://github.com/user-attachments/assets/16b457d6-3b6d-49b7-92c1-ffad80ab02b5)
 
-- Load & Clean: normalise date → midnight, amount → float, description → lowercase alphanumeric.
-- Candidate Generation: cross‑join, then filter ±₹1 and ±3 days.
-- Scoring:
-      amount score = max(0, 1 – Δamt/₹1) × 100
-      date score = max(0, 1 – Δdays/3) × 100
-      desc score = RapidFuzz’s token_set_ratio
-      composite = 0.45⋅amt + 0.25⋅date + 0.30⋅desc
-- Max‑Weight Matching: treat bank & ledger rows as bipartite graph nodes, edge = score, pick the one‑to‑one set maximizing total score, then threshold ≥ 70.
-- Render & Export: Flask writes three CSVs and populates the UI tables.
+
+1. **Load & Clean CSVs**  
+   - Read the bank & ledger files  
+   - Normalize dates (to midnight), amounts (to floats), and descriptions (lowercase + strip symbols)
+
+2. **Generate & Score Pairs**  
+   - Pair every bank row with every ledger row within ±₹1 and ±3 days  
+   - Compute three sub‑scores (0–100):  
+     - **Amount**: how close the amounts are  
+     - **Date**: how close the dates are  
+     - **Description**: fuzzy text similarity  
+   - Combine into one score:  
+     ```
+     total = 0.45*amount + 0.25*date + 0.30*description
+     ```
+
+3. **Pick the Best 1:1 Matches**  
+   - Build a graph where nodes are rows and edge weights are scores  
+   - Use a max‑weight matching algorithm to choose the highest‑scoring, one‑to‑one pairs  
+   - Discard any matches below the threshold (default 70)
+
+4. **Format & Present Results**  
+   - Merge matched pairs back into full records  
+   - List unmatched rows with a “No match” reason  
+   - Display as three CSVs or in a tabbed web UI  
+
